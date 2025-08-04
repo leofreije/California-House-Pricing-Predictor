@@ -1,18 +1,18 @@
-import streamlit as st ## Python framework, st provides UI components and app management
-import pandas as pd ## handles data as DataFrames
-import numpy as np ## provides numerical operations
-import matplotlib.pyplot as plt ## used for plotting
-import seaborn as sns ## used for plotting
-import plotly.express as px ## interactive plots, express provides high-level interface for creating plots
-import plotly.graph_objects as go ## interactive plots, graph_objects allows for more customization
-from plotly.subplots import make_subplots ## interactive plots, allows for multiple plots in one figure
-from sklearn.datasets import fetch_california_housing## provides California housing dataset
-from sklearn.model_selection import train_test_split## used for splitting data into training and testing sets
-from sklearn.ensemble import RandomForestRegressor ## provides Random Forest Regressor model
-from sklearn.linear_model import LinearRegression ## provides Linear Regression model
-from sklearn.preprocessing import StandardScaler ## used for scaling features
-from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score # used for evaluating model performance
-import warnings ## used for suppressing warnings
+import streamlit as st
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import plotly.express as px
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+from sklearn.datasets import fetch_california_housing
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+import warnings
 
 warnings.filterwarnings('ignore')
 
