@@ -434,110 +434,110 @@ def main():
             with col3:
                 min_samples_split = st.slider("Min Samples Split", 2, 10, 2)
 
-            if st.button("🚀 Train Models", type="primary"):
-                with st.spinner("Training models..."):
-                    # Prepare data
-                    X = df[feature_names + [
-                        'rooms_per_household', 'bedrooms_per_room',
-                        'population_per_household'
-                    ]]
-                    y = df[target_name]
+        if st.button("🚀 Train Models", type="primary"):
+            with st.spinner("Training models..."):
+                # Prepare data
+                X = df[feature_names + [
+                    'rooms_per_household', 'bedrooms_per_room',
+                    'population_per_household'
+                ]]
+                y = df[target_name]
 
-                    X_train, X_test, y_train, y_test = train_test_split(
-                        X, y, test_size=test_size, random_state=42)
+                X_train, X_test, y_train, y_test = train_test_split(
+                    X, y, test_size=test_size, random_state=42)
 
-                    # Train models
-                    if model_type == "Random Forest":
-                        model_params = {
-                            'n_estimators': n_estimators,
-                            'max_depth': max_depth,
-                            'min_samples_split': min_samples_split,
-                            'random_state': 42
-                        }
-                    else:
-                        model_params = {}
+                # Train models
+                if model_type == "Random Forest":
+                    model_params = {
+                        'n_estimators': n_estimators,
+                        'max_depth': max_depth,
+                        'min_samples_split': min_samples_split,
+                        'random_state': 42
+                    }
+                else:
+                    model_params = {}
 
-                    model, scaler = train_models(X_train, y_train, model_type, model_params)
+                model, scaler = train_models(X_train, y_train, model_type, model_params)
 
-                    # Make predictions
-                    if model_type == "Linear Regression":
-                        X_test_scaled = scaler.transform(X_test)
-                        y_pred = model.predict(X_test_scaled)
-                    else:
-                        y_pred = model.predict(X_test)
+                # Make predictions
+                if model_type == "Linear Regression":
+                    X_test_scaled = scaler.transform(X_test)
+                    y_pred = model.predict(X_test_scaled)
+                else:
+                    y_pred = model.predict(X_test)
 
-                    # Metrics
-                    r2 = r2_score(y_test, y_pred)
-                    mae = mean_absolute_error(y_test, y_pred)
-                    rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+                # Metrics
+                r2 = r2_score(y_test, y_pred)
+                mae = mean_absolute_error(y_test, y_pred)
+                rmse = np.sqrt(mean_squared_error(y_test, y_pred))
 
-                    # Store everything in session_state
-                    st.session_state.model = model
-                    st.session_state.scaler = scaler
-                    st.session_state.model_type = model_type
-                    st.session_state.feature_cols = X.columns.tolist()
-                    st.session_state.X_test = X_test
-                    st.session_state.y_test = y_test
-                    st.session_state.y_pred = y_pred
-                    st.session_state.r2 = r2
-                    st.session_state.mae = mae
-                    st.session_state.rmse = rmse
-                    st.session_state.model_ready = True # flag for model readiness
-                    st.session_state.show_training_success = True  # flag for showing training success message
+                # Store everything in session_state
+                st.session_state.model = model
+                st.session_state.scaler = scaler
+                st.session_state.model_type = model_type
+                st.session_state.feature_cols = X.columns.tolist()
+                st.session_state.X_test = X_test
+                st.session_state.y_test = y_test
+                st.session_state.y_pred = y_pred
+                st.session_state.r2 = r2
+                st.session_state.mae = mae
+                st.session_state.rmse = rmse
+                st.session_state.model_ready = True # flag for model readiness
+                st.session_state.show_training_success = True  # flag for showing training success message
 
-                st.rerun()  # trigger clean UI rerun
-            
-            if st.session_state.get('show_training_success', False): # show training results if flag is set
-                st.success("✅ Model training completed!")
+            st.rerun()  # trigger clean UI rerun
+        
+        if st.session_state.get('show_training_success', False): # show training results if flag is set
+            st.success("✅ Model training completed!")
 
-                st.subheader("📊 Model Performance")
-                col1, col2, col3 = st.columns(3)
-                with col1:
-                    st.metric(
-                        "R² Score",
-                        f"{st.session_state.r2:.4f}",
-                        help="R² Score (R-squared): Measures how well the model explains the variation in house prices. "
-                             "Values range from 0 to 1, where 1 means perfect predictions and 0 means the model is no better "
-                             "than just guessing the average price."
-                    )
-                with col2:
-                    st.metric(
-                        "MAE",
-                        f"${st.session_state.mae:.2f}K",
-                        help="MAE (Mean Absolute Error): The average difference between predicted and actual house prices. "
-                             "Lower values are better."
-                    )
-                with col3:
-                    st.metric(
-                        "RMSE",
-                        f"${st.session_state.rmse:.2f}K",
-                        help="RMSE (Root Mean Square Error): Similar to MAE but gives more penalty to large prediction errors. "
-                             "Lower values are better. RMSE is always equal to or higher than MAE."
-                    )
+            st.subheader("📊 Model Performance")
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.metric(
+                    "R² Score",
+                    f"{st.session_state.r2:.4f}",
+                    help="R² Score (R-squared): Measures how well the model explains the variation in house prices. "
+                         "Values range from 0 to 1, where 1 means perfect predictions and 0 means the model is no better "
+                         "than just guessing the average price."
+                )
+            with col2:
+                st.metric(
+                    "MAE",
+                    f"${st.session_state.mae:.2f}K",
+                    help="MAE (Mean Absolute Error): The average difference between predicted and actual house prices. "
+                         "Lower values are better."
+                )
+            with col3:
+                st.metric(
+                    "RMSE",
+                    f"${st.session_state.rmse:.2f}K",
+                    help="RMSE (Root Mean Square Error): Similar to MAE but gives more penalty to large prediction errors. "
+                         "Lower values are better. RMSE is always equal to or higher than MAE."
+                )
 
-                st.subheader("🎯 Predictions vs Actual Values")
-                pred_fig = go.Figure()
-                pred_fig.add_trace(
-                    go.Scatter(x=st.session_state.y_test,
-                               y=st.session_state.y_pred,
-                               mode='markers',
-                               name='Predictions',
-                               opacity=0.6,
-                               marker=dict(color='blue', size=4)))
-                pred_fig.add_trace(
-                    go.Scatter(x=[st.session_state.y_test.min(), st.session_state.y_test.max()],
-                               y=[st.session_state.y_test.min(), st.session_state.y_test.max()],
-                               mode='lines',
-                               name='Perfect Prediction',
-                               line=dict(color='red', dash='dash')))
-                pred_fig.update_layout(title="Predicted vs Actual House Values",
-                                       xaxis_title="Actual Values ($100K)",
-                                       yaxis_title="Predicted Values ($100K)",
-                                       height=500)
-                st.plotly_chart(pred_fig, use_container_width=True)
+            st.subheader("🎯 Predictions vs Actual Values")
+            pred_fig = go.Figure()
+            pred_fig.add_trace(
+                go.Scatter(x=st.session_state.y_test,
+                           y=st.session_state.y_pred,
+                           mode='markers',
+                           name='Predictions',
+                           opacity=0.6,
+                           marker=dict(color='blue', size=4)))
+            pred_fig.add_trace(
+                go.Scatter(x=[st.session_state.y_test.min(), st.session_state.y_test.max()],
+                           y=[st.session_state.y_test.min(), st.session_state.y_test.max()],
+                           mode='lines',
+                           name='Perfect Prediction',
+                           line=dict(color='red', dash='dash')))
+            pred_fig.update_layout(title="Predicted vs Actual House Values",
+                                   xaxis_title="Actual Values ($100K)",
+                                   yaxis_title="Predicted Values ($100K)",
+                                   height=500)
+            st.plotly_chart(pred_fig, use_container_width=True)
 
-                # Clear flag so it doesn't show again unless retrained
-                st.session_state.show_training_success = False
+            # Clear flag so it doesn't show again unless retrained
+            st.session_state.show_training_success = False
 
     # Make Predictions
     def show_predictions():
